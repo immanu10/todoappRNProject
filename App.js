@@ -51,9 +51,14 @@ export default function App() {
         />
         <TouchableOpacity
           onPress={() => {
-            Keyboard.dismiss();
-            setListItem([text].concat([...listItem]));
-            setText("");
+            if (!text.trim()) {
+              alert("Please Enter task");
+              return;
+            } else {
+              Keyboard.dismiss();
+              setListItem([text].concat([...listItem]));
+              setText("");
+            }
           }}
           style={styles.addBtn}
         >
