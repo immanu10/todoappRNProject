@@ -5,8 +5,8 @@ import {
   View,
   TextInput,
   TouchableOpacity,
-  Button,
   Keyboard,
+  ScrollView,
 } from "react-native";
 import Item from "./components/Item";
 
@@ -15,26 +15,30 @@ export default function App() {
   const [listItem, setListItem] = useState([]);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.heading}>First react Native project!</Text>
-      <Text style={styles.subheading}>TODO!</Text>
-      <View>
-        {listItem.map((item, index) => {
-          return (
-            <TouchableOpacity
-              key={index}
-              style={styles.deleteContainer}
-              onPress={() => {
-                let copyListItem = [...listItem];
-                copyListItem.splice(index, 1);
-                setListItem(copyListItem);
-              }}
-            >
-              <Item text={item} />
-              <Text style={styles.deleteBtn}>X</Text>
-            </TouchableOpacity>
-          );
-        })}
+    <>
+      <View style={styles.container}>
+        <Text style={styles.heading}>First react Native project!</Text>
+        <Text style={styles.subheading}>TODO!</Text>
+        <ScrollView>
+          <View>
+            {listItem.map((item, index) => {
+              return (
+                <TouchableOpacity
+                  key={index}
+                  style={styles.deleteContainer}
+                  onPress={() => {
+                    let copyListItem = [...listItem];
+                    copyListItem.splice(index, 1);
+                    setListItem(copyListItem);
+                  }}
+                >
+                  <Item text={item} />
+                  <Text style={styles.deleteBtn}>X</Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        </ScrollView>
       </View>
       <View style={styles.textContainer}>
         <TextInput
@@ -43,17 +47,20 @@ export default function App() {
             setText(text);
           }}
           value={text}
+          placeholder="Add your Task"
         />
-        <Button
+        <TouchableOpacity
           onPress={() => {
             Keyboard.dismiss();
-            setListItem([...listItem, text]);
+            setListItem([text].concat([...listItem]));
             setText("");
           }}
-          title="Add"
-        />
+          style={styles.addBtn}
+        >
+          <Text style={{ fontSize: 36, textAlign: "center" }}>+</Text>
+        </TouchableOpacity>
       </View>
-    </View>
+    </>
   );
 }
 
@@ -63,6 +70,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f8f8f8",
     padding: 20,
     marginTop: 10,
+    maxHeight: "90%",
   },
   heading: {
     fontSize: 26,
@@ -75,14 +83,15 @@ const styles = StyleSheet.create({
   textContainer: {
     flex: 1,
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "space-around",
     alignItems: "center",
     position: "absolute",
-    bottom: 30,
-    marginLeft: 30,
+    bottom: 0,
+    maxWidth: "100%",
+    marginBottom: 5,
   },
   input: {
-    width: "80%",
+    width: "85%",
     borderWidth: 1,
     padding: 10,
     borderRadius: 6,
@@ -103,5 +112,11 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     padding: 6,
     borderRadius: 8,
+  },
+  addBtn: {
+    backgroundColor: "skyblue",
+    height: 50,
+    width: 50,
+    borderRadius: 50,
   },
 });
